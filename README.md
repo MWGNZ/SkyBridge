@@ -23,14 +23,22 @@ If you find this project useful please consider donating, it really helps a lot!
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/videah)
 
 ## Getting Started
-In order to run SkyBridge you will need the [Dart SDK](https://dart.dev/get-dart) installed on your system.
+In order to run SkyBridge you will need the [Dart SDK](https://dart.dev/get-dart) and nodejs 21 installed on your system.
 
 You will also need the Dart Frog CLI installed to run a development server. You can install it with the following
 command:
 
 ```shell
 # 📦 Install the dart_frog cli from pub.dev
-dart pub global activate dart_frog_cli
+dart pub global activate dart_frog_cli 0.3.8
+```
+
+Clone the repo:
+
+```shell
+# 📥 Clone the repo
+git clone https://github.com/videah/skybridge.git
+cd skybridge
 ```
 
 Some environment variables need to be set before you can run SkyBridge. You can set them in a `.env` file in the root
@@ -42,12 +50,17 @@ cp .env.example .env
 open .env
 ```
 
+Build the database:
+
+```shell
+npm i prisma@4.16.2
+npx prisma generate
+npx --yes prisma@4.16.2 migrate deploy
+```
+
 Once that's done you can start a development server with the following command:
 
 ```shell
-# 📥 Clone the repo
-git clone https://github.com/videah/skybridge.git
-cd skybridge
 dart pub get
 
 # 🏁 Start the dev server

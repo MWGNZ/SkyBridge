@@ -1,16 +1,8 @@
 # Official Dart image: https://hub.docker.com/_/dart
 # Specify the Dart SDK base image version using dart:<version> (ex: dart:2.17)
-FROM dart:3.2.4 AS build
+FROM dart:3.6.0 AS build
 
 WORKDIR /app
-
-# Resolve app dependencies.
-COPY pubspec.* ./
-RUN dart pub get
-RUN dart pub global activate dart_frog_cli
-
-# Copy app source code and AOT compile it.
-COPY . .
 
 # Install Node.js LTS.
 RUN set -uex; \
@@ -20,11 +12,19 @@ RUN set -uex; \
     curl -fsSL https://deb.nodesource.com/setup_21.x | bash - && \
     apt-get install -y nodejs
 
+# Resolve app dependencies.
+COPY pubspec.* ./
+RUN dart pub get
+RUN dart pub global activate dart_frog_cli 0.3.8
+
+# Copy app source code and AOT compile it.
+COPY . .
+
+# Build the DB.
 RUN npm i prisma@4.16.2
 RUN npx prisma generate
 
 # Generate a production build.
-RUN dart pub global activate dart_frog_cli 0.3.8
 RUN dart pub global run dart_frog_cli:dart_frog build
 
 # Ensure packages are still up-to-date if anything has changed.

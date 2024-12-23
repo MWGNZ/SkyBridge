@@ -25,3 +25,4 @@ coverage/
 
 # Database
 /database/
+/node_modules/
