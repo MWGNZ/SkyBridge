@@ -23,7 +23,7 @@ Future<Response> onRequest(RequestContext context) async {
       title: 'SkyBridge',
       shortDescription: 'A Mastodon bridge for Bluesky.',
       description: 'A Mastodon bridge for Bluesky.',
-      email: 'videah@selfish.systems',
+      email: 'skybridge@omuch.info',
       version: '4.1.2',
       urls: {},
       stats: StatInfo(

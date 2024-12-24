@@ -74,7 +74,7 @@ Future<Response> onRequest(RequestContext context) async {
         message: 'Register on the main Bluesky website.',
       ),
       contact: ContactInfo(
-        email: 'videah@selfish.systems',
+        email: 'skybridge@omuch.info',
         account: getPlaceholderVideahAccount(),
       ),
       rules: [
