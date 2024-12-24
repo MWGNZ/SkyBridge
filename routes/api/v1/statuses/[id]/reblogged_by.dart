@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:bluesky/bluesky.dart' as bsky;
+import 'package:atproto_core/atproto_core.dart' as core;
 import 'package:dart_frog/dart_frog.dart';
 import 'package:sky_bridge/auth.dart';
 import 'package:sky_bridge/database.dart';
@@ -36,7 +37,7 @@ Future<Response> onRequest<T>(RequestContext context, String id) async {
   if (postRecord == null) Response(statusCode: HttpStatus.notFound);
 
   final response = await bluesky.feed.getRepostedBy(
-    uri: bsky.AtUri.parse(postRecord!.uri),
+    uri: core.AtUri.parse(postRecord!.uri),
   );
 
   // Construct a list of handles from the response.

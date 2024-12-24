@@ -1,4 +1,5 @@
 import 'package:bluesky/bluesky.dart' as bsky;
+import 'package:atproto_core/atproto_core.dart' as core;
 import 'package:collection/collection.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:sky_bridge/database.dart';
@@ -35,8 +36,8 @@ class MastodonNotification {
     List<bsky.Notification> notifs,
     bsky.Bluesky bluesky,
   ) async {
-    final pairs = <bsky.Notification, bsky.AtUri?>{};
-    final postUris = <bsky.AtUri>[];
+    final pairs = <bsky.Notification, core.AtUri?>{};
+    final postUris = <core.AtUri>[];
 
     // Find the appropriate record for each notification.
     for (final notification in notifs) {
@@ -47,7 +48,7 @@ class MastodonNotification {
         case 'like':
           final subject = unknownRecord['subject'] as Map<String, dynamic>;
           final uriString = subject['uri'] as String;
-          final uri = bsky.AtUri.parse(uriString);
+          final uri = core.AtUri.parse(uriString);
 
           pairs[notification] = uri;
           // If we don't already have this URI marked down, add it to the list.
@@ -80,7 +81,7 @@ class MastodonNotification {
     // Get all the posts that we need to attach to the notifications in
     // an efficient way that takes Bluesky's maximum URI count. Chunks the
     // requests into groups of 25.
-    final posts = await chunkResults<bsky.Post, bsky.AtUri>(
+    final posts = await chunkResults<bsky.Post, core.AtUri>(
       items: postUris,
       callback: (chunk) async {
         final response = await bluesky.feed.getPosts(uris: chunk);
@@ -100,7 +101,7 @@ class MastodonNotification {
     final notifications = <MastodonNotification>[];
     Future<void> constructNotification(
       bsky.Notification notification,
-      bsky.AtUri? uri,
+      core.AtUri? uri,
     ) async {
       final record = await notificationToDatabase(notification);
 

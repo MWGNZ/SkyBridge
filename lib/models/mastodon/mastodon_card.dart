@@ -59,6 +59,7 @@ class MastodonCard {
       images: (_) => null,
       recordWithMedia: (record) => embedViewRecordToCard(record.data.record),
       unknown: (_) => null,
+      video: (_) => null,
     );
   }
 
@@ -108,6 +109,7 @@ class MastodonCard {
               external: (_) {},
               recordWithMedia: (_) {},
               unknown: (_) {},
+              video: (_) {},
             );
           }
         }
@@ -117,6 +119,9 @@ class MastodonCard {
       generatorView: (_) {},
       unknown: (_) {},
       listView: (_) {},
+      labelerView: (_) {},
+      starterPackViewBasic: (_) {},
+      viewDetached: (_) {},
     );
 
     return MastodonCard(

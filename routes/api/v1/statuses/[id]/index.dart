@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:bluesky/bluesky.dart' as bsky;
+import 'package:atproto_core/atproto_core.dart' as core;
 import 'package:dart_frog/dart_frog.dart';
 import 'package:sky_bridge/auth.dart';
 import 'package:sky_bridge/database.dart';
@@ -33,7 +34,7 @@ Future<Response> onRequest<T>(RequestContext context, String id) async {
 
   // Get the post from bluesky, we assume we already know the post exists
   // and don't bother adding to the database or anything.
-  final uri = bsky.AtUri.parse(postRecord!.uri);
+  final uri = core.AtUri.parse(postRecord!.uri);
   final response = await bluesky.feed.getPosts(uris: [uri]);
   final post = response.data.posts.first;
 
@@ -50,7 +51,7 @@ Future<Response> onRequest<T>(RequestContext context, String id) async {
     );
   } else if (context.request.method == HttpMethod.delete) {
     // Delete the post from bluesky.
-    await bluesky.repo.deleteRecord(uri: uri);
+    await bluesky.atproto.repo.deleteRecord(uri: uri);
 
     return threadedJsonResponse(
       body: processedPost.first,

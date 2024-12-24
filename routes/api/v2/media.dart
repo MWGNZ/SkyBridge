@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:dart_frog/dart_frog.dart';
+import 'package:atproto/atproto.dart' as at;
 import 'package:image_compression/image_compression.dart';
 import 'package:sky_bridge/auth.dart';
 import 'package:sky_bridge/database.dart';
@@ -85,7 +86,7 @@ Future<Response> onRequest(RequestContext context) async {
     }
 
     // Upload the image file to bluesky.
-    final response = await bluesky.repo.uploadBlob(imageFileBytes);
+    final response = await bluesky.atproto.repo.uploadBlob(imageFileBytes);
     final blob = response.data.blob;
 
     // We need to store the blob info in the database so it can be retrieved

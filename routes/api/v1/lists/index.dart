@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:bluesky/bluesky.dart' as bsky;
+import 'package:atproto_core/atproto_core.dart' as core;
 import 'package:dart_frog/dart_frog.dart';
 import 'package:sky_bridge/auth.dart';
 import 'package:sky_bridge/database.dart';
@@ -28,11 +29,16 @@ Future<Response> onRequest(RequestContext context) async {
         contentLabel: (_) {},
         personalDetails: (_) {},
         feedView: (_) {},
+        interests: (_) {},
+        hiddenPosts: (_) {},
         threadView: (_) {},
+        labelersPref: (_) {},
+        mutedWords: (_) {},
+        savedFeedsV2: (_) {},
         savedFeeds: (feedUris) async {
           // Get the feed generator views for each saved feed, giving us info
           // like the name of the feed and the accompanying IDs.
-          final result = await chunkResults<bsky.FeedGeneratorView, bsky.AtUri>(
+          final result = await chunkResults<bsky.FeedGeneratorView, core.AtUri>(
             items: feedUris.data.savedUris,
             callback: (chunk) async {
               final response = await bluesky.feed.getFeedGenerators(

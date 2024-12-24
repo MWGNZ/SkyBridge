@@ -43,7 +43,7 @@ Future<Response> onRequest<T>(RequestContext context, String id) async {
   // the relationship.
   final followUri = profile.data.viewer.following;
   if (followUri != null) {
-    await bluesky.repo.deleteRecord(uri: followUri);
+    await bluesky.atproto.repo.deleteRecord(uri: followUri);
   }
 
   final rel = await MastodonRelationship.getActorRelationship(bluesky, record!);

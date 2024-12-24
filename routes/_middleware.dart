@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:bluesky/bluesky.dart' as bsky;
+import 'package:atproto_core/atproto_core.dart' as core;
 import 'package:dart_frog/dart_frog.dart';
 import 'package:shelf_cors_headers/shelf_cors_headers.dart';
 import 'package:sky_bridge/auth.dart';
@@ -20,7 +21,7 @@ Handler middleware(Handler handler) {
             },
           ),
       );
-    } on bsky.InvalidRequestException catch (e) {
+    } on core.InvalidRequestException catch (e) {
       final error = e.response.data.error;
 
       // This middleware is only for handling expired tokens.
@@ -52,7 +53,7 @@ Handler middleware(Handler handler) {
             },
           ),
       );
-    } on bsky.XRPCException catch (e) {
+    } on core.XRPCException catch (e) {
       if (e.response.status.code == HttpStatus.tooManyRequests) {
         final response = Response.json(
           statusCode: HttpStatus.tooManyRequests,

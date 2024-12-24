@@ -1,5 +1,5 @@
 import 'package:atproto/atproto.dart' as at;
-import 'package:atproto/atproto.dart';
+import 'package:atproto_core/atproto_core.dart' as core;
 import 'package:bluesky/bluesky.dart' as bsky;
 import 'package:bluesky_text/bluesky_text.dart';
 import 'package:collection/collection.dart';
@@ -74,6 +74,7 @@ class MastodonPost {
     final repost = view.reason?.map(
       repost: (repost) => repost,
       unknown: (_) => null,
+      pin: (_) => null,
     );
     final isRepost = repost != null;
 
@@ -373,8 +374,8 @@ class MastodonPost {
       final createdAt = DateTime.now().toUtc();
 
       // Create the appropriate bluesky record.
-      await bluesky.repo.createRecord(
-        collection: at.NSID.create('feed.bsky.app', 'repost'),
+      await bluesky.atproto.repo.createRecord(
+        collection: core.NSID.create('feed.bsky.app', 'repost'),
         record: {
           'subject': {
             'cid': postRecord.cid,
@@ -524,13 +525,13 @@ class MastodonPost {
   /// Is not included in the JSON representation of a post, only used
   /// internally.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  final bsky.AtUri? bskyUri;
+  final core.AtUri? bskyUri;
 
   /// The bluesky URI of the post this post is a reply to.
   /// Is not included in the JSON representation of a post, only used
   /// internally for [processParentPosts].
   @JsonKey(includeFromJson: false, includeToJson: false)
-  final bsky.AtUri? replyPostUri;
+  final core.AtUri? replyPostUri;
 }
 
 /// The visibility of a post.
@@ -561,7 +562,7 @@ Future<List<MastodonPost>> processParentPosts(
   List<MastodonPost> posts,
 ) async {
   // Collect all the CIDs of the posts we need to fetch.
-  final uris = <bsky.AtUri>[];
+  final uris = <core.AtUri>[];
   for (final post in posts) {
     final uri = post.replyPostUri;
     if (uri != null) {
@@ -571,7 +572,7 @@ Future<List<MastodonPost>> processParentPosts(
 
   // Pull the posts from the server in chunks to avoid hitting the
   // maximum post limit.
-  final results = await chunkResults<bsky.Post, bsky.AtUri>(
+  final results = await chunkResults<bsky.Post, core.AtUri>(
     items: uris,
     callback: (chunk) async {
       final response = await bluesky.feed.getPosts(uris: chunk);

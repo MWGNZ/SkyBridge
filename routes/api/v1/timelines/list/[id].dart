@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:bluesky/bluesky.dart' as bsky;
+import 'package:atproto_core/atproto_core.dart' as core;
 import 'package:dart_frog/dart_frog.dart';
 import 'package:sky_bridge/auth.dart';
 import 'package:sky_bridge/database.dart';
@@ -42,7 +43,7 @@ Future<Response> onRequest<T>(RequestContext context, String id) async {
   if (record == null) return Response(statusCode: HttpStatus.notFound);
 
   final feed = await bluesky.feed.getFeed(
-    generatorUri: bsky.AtUri.parse(record.uri),
+    generatorUri: core.AtUri.parse(record.uri),
   );
 
   // Take all the posts and convert them to Mastodon ones

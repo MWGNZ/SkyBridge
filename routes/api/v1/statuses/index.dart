@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:bluesky/bluesky.dart' as bsky;
+import 'package:atproto/atproto.dart' as at;
+import 'package:atproto_core/atproto_core.dart' as core;
 import 'package:dart_frog/dart_frog.dart';
 import 'package:sky_bridge/auth.dart';
 import 'package:sky_bridge/database.dart';
@@ -47,10 +49,10 @@ Future<Response> onRequest<T>(RequestContext context) async {
     // The post we're trying to reply to doesn't exist in the database.
     if (record == null) return Response(statusCode: HttpStatus.notFound);
 
-    final uri = bsky.AtUri.parse(record.uri);
+    final uri = core.AtUri.parse(record.uri);
     final post = (await bluesky.feed.getPosts(uris: [uri])).data.posts.first;
 
-    final parentRef = bsky.StrongRef(
+    final parentRef = at.StrongRef(
       cid: post.cid,
       uri: post.uri,
     );

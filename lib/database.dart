@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:bluesky/bluesky.dart' as bsky;
+import 'package:atproto_core/atproto_core.dart' as core;
 import 'package:crypto/crypto.dart';
 import 'package:orm/orm.dart';
 import 'package:sky_bridge/models/mastodon/mastodon_account.dart';
@@ -165,6 +166,9 @@ Future<PostRecord?> embedPostToDatabase(bsky.EmbedViewRecordView view) async {
     generatorView: (_) => null,
     unknown: (_) => null,
     listView: (_) => null,
+    labelerView: (_) => null,
+    viewDetached: (_) => null,
+    starterPackViewBasic: (_) => null,
   );
 }
 
@@ -174,6 +178,7 @@ Future<RepostRecord> repostToDatabase(bsky.FeedView view) async {
   final repost = view.reason?.map(
     repost: (repost) => repost,
     unknown: (_) => null,
+    pin: (_) => null,
   );
   final isRepost = repost != null;
   if (!isRepost) {
@@ -416,11 +421,11 @@ extension RepostExtension on PostRecord {
 }
 
 /// Extension methods for [MediaRecord] that convert back and forth between
-/// [MediaRecord] and [bsky.Blob].
+/// [MediaRecord] and [core.Blob].
 extension BlobExtension on MediaRecord {
-  /// Turn a [bsky.Blob] into a [MediaRecord] along with a [description].
+  /// Turn a [core.Blob] into a [MediaRecord] along with a [description].
   static Future<MediaRecord> fromBlob(
-    bsky.Blob blob,
+    core.Blob blob,
     String description,
   ) async {
     final id = await generateUniqueSnowflake(
@@ -446,13 +451,13 @@ extension BlobExtension on MediaRecord {
     return mediaRecord;
   }
 
-  /// Converts this [MediaRecord] back into a [bsky.Blob].
-  bsky.Blob toBlob() {
-    return bsky.Blob(
+  /// Converts this [MediaRecord] back into a [core.Blob].
+  core.Blob toBlob() {
+    return core.Blob(
       type: type,
       mimeType: mimeType,
       size: size,
-      ref: bsky.BlobRef(link: link),
+      ref: core.BlobRef(link: link),
     );
   }
 }

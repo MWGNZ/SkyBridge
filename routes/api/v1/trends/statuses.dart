@@ -16,13 +16,15 @@ Future<Response> onRequest(RequestContext context) async {
   // Get the popular feed, this could break in the future since it's
   // not part of the spec and the bluesky devs intend to switch to a
   // way of picking your own algorithm.
-  final feed = await bluesky.unspecced.getPopular(limit: 40);
+  final feed = await bluesky.unspecced.getPopularFeedGenerators(limit: 40);
 
   // Take all the posts and convert them to Mastodon ones
   // Await all the futures, getting any necessary data from the database.
   final posts = await databaseTransaction(() async {
-    final futures = feed.data.feed.map(MastodonPost.fromFeedView).toList();
-    return Future.wait(futures);
+    // TODO: fix this if i ever care about trends
+    // final futures = feed.data.feed.map(MastodonPost.fromFeedView).toList();
+    // return Future.wait(futures);
+    return;
   });
 
   return threadedJsonResponse(

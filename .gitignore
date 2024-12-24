@@ -25,4 +25,10 @@ coverage/
 
 # Database
 /database/
+prisma-query-engine
+dmmf.json
+
+# Javascript
 /node_modules/
+package.json
+package-lock.json

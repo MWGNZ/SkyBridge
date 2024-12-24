@@ -9,7 +9,7 @@ RUN set -uex; \
     apt-get update; \
     apt-get install -y ca-certificates curl gnupg; \
     mkdir -p /etc/apt/keyrings; \
-    curl -fsSL https://deb.nodesource.com/setup_21.x | bash - && \
+    curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
     apt-get install -y nodejs
 
 # Resolve app dependencies.
@@ -39,7 +39,7 @@ RUN set -uex; \
     apt-get update; \
     apt-get install -y ca-certificates curl gnupg; \
     mkdir -p /etc/apt/keyrings; \
-    curl -fsSL https://deb.nodesource.com/setup_21.x | bash - && \
+    curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
     apt-get install -y nodejs
 
 RUN npm i prisma@4.16.2

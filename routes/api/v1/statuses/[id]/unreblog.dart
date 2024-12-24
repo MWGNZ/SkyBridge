@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:bluesky/bluesky.dart' as bsky;
+import 'package:atproto_core/atproto_core.dart' as core;
 import 'package:dart_frog/dart_frog.dart';
 import 'package:sky_bridge/auth.dart';
 import 'package:sky_bridge/database.dart';
@@ -38,7 +39,7 @@ Future<Response> onRequest<T>(RequestContext context, String id) async {
 
   // Get the post from bluesky, we assume we already know the post exists
   // and don't bother adding to the database or anything.
-  final uri = bsky.AtUri.parse(postRecord!.uri);
+  final uri = core.AtUri.parse(postRecord!.uri);
   final response = await bluesky.feed.getPosts(uris: [uri]);
   final post = response.data.posts.first;
 
@@ -57,7 +58,7 @@ Future<Response> onRequest<T>(RequestContext context, String id) async {
 
   if (post.viewer.repost != null) {
     // Unlike the post now that we have everything in order.
-    await bluesky.repo.deleteRecord(uri: post.viewer.repost!);
+    await bluesky.atproto.repo.deleteRecord(uri: post.viewer.repost!);
     mastodonPost
       ..reblogged = false
       ..reblogsCount -= 1;
